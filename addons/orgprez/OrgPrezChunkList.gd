@@ -1,4 +1,5 @@
-tool extends VBoxContainer
+@tool
+extends VBoxContainer
 # visual representation of OrgChunk list
 
 enum Col { INDEX, JPXY, TEXT }
@@ -8,33 +9,33 @@ signal macro_chunk_selected(chunk)
 signal event_chunk_selected(chunk)
 signal chunk_selected(chunk)
 
-export var org_dir:String = 'res://'
-onready var tree : Tree = $Tree
-onready var track_names = Org.Track.keys()
+@export var org_dir:String = 'res://'
+@onready var tree : Tree = $Tree
+@onready var track_names = Org.Track.keys()
 
 func set_org(org:OrgNode):
 	tree.clear()
 	var root = tree.create_item()
 	for col in Col.values():
-		tree.set_column_min_width(col, 60)
+		tree.set_column_custom_minimum_width(col, 60)
 		tree.set_column_expand(col, false)
-	tree.set_column_min_width(Col.INDEX, 32)
+	tree.set_column_custom_minimum_width(Col.INDEX, 32)
 	tree.set_column_expand(Col.TEXT, true)
 	if not org: return
 	for chunk in org.chunks:
 		var item : TreeItem = tree.create_item(root)
 		item.set_text(Col.INDEX, str(chunk.index))
 		# item.set_text(Col.TRACK, track_names[chunk.track][0].to_lower())
-		item.set_text(Col.JPXY, ' %d %d'%[chunk.jpxy.x, chunk.jpxy.y]); item.set_custom_color(Col.JPXY, Color.darkgray)
-		for c in [Col.INDEX]: item.set_text_align(c, TreeItem.ALIGN_RIGHT)
+		item.set_text(Col.JPXY, ' %d %d'%[chunk.jpxy.x, chunk.jpxy.y]); item.set_custom_color(Col.JPXY, Color.DARK_GRAY)
+		for c in [Col.INDEX]: item.set_text_alignment(c, HORIZONTAL_ALIGNMENT_RIGHT)
 		item.set_text(Col.TEXT, chunk.to_string())
 		item.set_meta('chunk', chunk)
-		var color = Color.white
+		var color = Color.WHITE
 		match chunk.track:
 			Org.Track.AUDIO:
-				if not chunk.file_exists(org_dir): color = Color.orangered
-			Org.Track.MACRO: color = Color.lightseagreen
-			Org.Track.EVENT: color = Color.cornflower
+				if not chunk.file_exists(org_dir): color = Color.ORANGE_RED
+			Org.Track.MACRO: color = Color.LIGHT_SEA_GREEN
+			Org.Track.EVENT: color = Color.CORNFLOWER_BLUE
 		item.set_custom_color(Col.TEXT, color)
 
 	var first = tree.get_root().get_children()
@@ -57,8 +58,8 @@ func clear_highlights():
 
 func highlight_chunk(chunk, color):
 	if not chunk: return
-	var item = tree.get_root().get_children()
-	while item != null:
+	var items = tree.get_root().get_children()
+	for item in items:
 		var item_chunk = item.get_meta('chunk')
 		if item_chunk.index == chunk.index:
 			item.set_custom_bg_color(0, color)

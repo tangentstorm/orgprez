@@ -1,4 +1,5 @@
-tool class_name OrgCursor extends Reference
+@tool
+class_name OrgCursor extends RefCounted
 
 enum S { ENTER, DESCEND, CHUNKS, NEXT, RETURN, BREAK }
 
@@ -53,7 +54,7 @@ func next_chunk()->OrgChunk:
 	return res
 
 func goto_index(index, track)->OrgChunk:
-	# go to the first chunk on track where chunk.index >= index
+	# go to the first chunk checked track where chunk.index >= index
 	_init(root)
 	var res:OrgChunk = next_chunk()
 	while res and (res.track != track or res.index < index):

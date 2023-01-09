@@ -1,4 +1,5 @@
-tool class_name Org
+@tool
+class_name Org
 # Represent emacs org-mode files as trees of objects.
 # (The orgprez file format is a subset of org syntax)
 # https://orgmode.org/
@@ -36,7 +37,7 @@ class OrgParser:
 		jpxy += Vector2(1,0)
 		jpxy *= Vector2(1,0)
 		if (cut-1) > len(stack):
-			printerr("warning: too many asterisks on line ", lno)
+			printerr("warning: too many asterisks checked line ", lno)
 		else:
 			node = OrgNode.new(cut, rest)
 			stack[cut-1].add_child(node)
@@ -64,7 +65,7 @@ class OrgParser:
 	func org_from_path(path:String)->OrgNode:
 		root = OrgNode.new(''); node = root; stack = [root]; chunk = null
 		root.resource_path = path
-		var f = File.new(); f.open(path, File.READ)
+		var f = FileAccess.open(path, FileAccess.READ)
 		var lno = -1; var in_src = false
 		for line in f.get_as_text().split("\n"):
 			lno += 1

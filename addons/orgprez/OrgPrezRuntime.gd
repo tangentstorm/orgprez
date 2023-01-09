@@ -5,8 +5,8 @@ var org_path = ProjectSettings.get("global/default_org_file")
 var user_scene
 var org_deck : OrgDeck
 
-onready var stepper:OrgPrezStepper = $OrgPrezStepper
-onready var script_engine = $OrgPrezScriptEngine
+@onready var stepper:OrgPrezStepper = $OrgPrezStepper
+@onready var script_engine = $OrgPrezScriptEngine
 
 const bytesPerSample = 2
 const channels = 2
@@ -28,7 +28,7 @@ func _ready():
 	var tscn = org_path.replace('.org','.tscn')
 	if not ResourceLoader.exists(tscn):
 		tscn = 'res://addons/jprez/JPrezPlayer.tscn' # !! todo: new default scene
-	user_scene = load(tscn).instance()
+	user_scene = load(tscn).instantiate()
 	add_child(user_scene)
 	if user_scene.has_method('set_org_path'):
 		user_scene.set_org_path(org.get_global_path())
@@ -40,7 +40,7 @@ func _ready():
 		d = OrgDeck.new()
 		user_scene.add_child(d)
 	org_deck = d
-	stepper.connect('orgprez_node_changed', self, '_on_orgnode_changed')
+	stepper.connect('orgprez_node_changed',Callable(self,'_on_orgnode_changed'))
 	_on_orgnode_changed(stepper.get_current_org_node())
 
 func load_timeline():
@@ -57,10 +57,10 @@ func load_timeline():
 		if chunk.track != Org.Track.AUDIO: continue
 		if chunk.file_exists(org.get_dir()):
 			var wav = org.get_dir()+chunk.suggest_path()
-			var sam : AudioStreamSample = AudioLoader.loadfile(wav)
+			var sam : AudioStreamWAV = AudioLoader.loadfile(wav)
 			var rect = Waveform.new()
-			rect.color = Color.beige if i % 2 else Color.bisque; i += 1
-			rect.rect_min_size = Vector2(sam.data.size() * 0.0005,64)
+			rect.color = Color.BEIGE if i % 2 else Color.BISQUE; i += 1
+			rect.minimum_size = Vector2(sam.data.size() * 0.0005,64)
 			if i < 10: rect.sample = sam
 			rect.timeScale = 512
 			# timeline.add_child(rect)
@@ -75,8 +75,7 @@ func load_timeline():
 	print("total length: ", hms(total))
 
 func save_org_file():
-	var f = File.new()
-	f.open(org_path, File.WRITE)
+	var f = FileAccess.open(org_path, FileAccess.WRITE)
 	f.store_string(org.to_string())
 	f.close()
 

@@ -12,23 +12,23 @@ custom_constants/separation = 0
 script = ExtResource( 6 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 466.0
-rect_min_size = Vector2( 0, 100 )
+offset_right = 1024.0
+offset_bottom = 466.0
+minimum_size = Vector2( 0, 100 )
 size_flags_vertical = 3
 
 [node name="Outline" parent="HBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 256.0
-margin_bottom = 466.0
-rect_min_size = Vector2( 256, 0 )
+offset_right = 256.0
+offset_bottom = 466.0
+minimum_size = Vector2( 256, 0 )
 size_flags_vertical = 3
 
 [node name="HSplit" type="HSplitContainer" parent="HBoxContainer"]
-margin_left = 260.0
-margin_right = 1024.0
-margin_bottom = 466.0
+offset_left = 260.0
+offset_right = 1024.0
+offset_bottom = 466.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 320
@@ -39,48 +39,48 @@ __meta__ = {
 [node name="ChunkList" parent="HBoxContainer/HSplit" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 696.0
-margin_bottom = 466.0
+offset_right = 696.0
+offset_bottom = 466.0
 size_flags_horizontal = 3
 
 [node name="CodeEditor" type="TextEdit" parent="HBoxContainer/HSplit"]
-margin_left = 708.0
-margin_right = 764.0
-margin_bottom = 466.0
+offset_left = 708.0
+offset_right = 764.0
+offset_bottom = 466.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EditPanel" type="PanelContainer" parent="."]
-margin_top = 466.0
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_top = 466.0
+offset_right = 1024.0
+offset_bottom = 600.0
 
 [node name="Panel" type="HBoxContainer" parent="EditPanel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1017.0
-margin_bottom = 127.0
-rect_min_size = Vector2( 0, 120 )
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 1017.0
+offset_bottom = 127.0
+minimum_size = Vector2( 0, 120 )
 size_flags_horizontal = 3
 
 [node name="Prompter" type="LineEdit" parent="EditPanel/Panel"]
-margin_right = 950.0
-margin_bottom = 120.0
+offset_right = 950.0
+offset_bottom = 120.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="EditPanel/Panel"]
-margin_left = 954.0
-margin_right = 1010.0
-margin_bottom = 120.0
+offset_left = 954.0
+offset_right = 1010.0
+offset_bottom = 120.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="UpdateButton" type="Button" parent="EditPanel/Panel/VBoxContainer"]
-margin_right = 56.0
-margin_bottom = 20.0
+offset_right = 56.0
+offset_bottom = 20.0
 disabled = true
 text = "update"
 

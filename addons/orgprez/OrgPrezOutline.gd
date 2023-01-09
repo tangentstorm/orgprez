@@ -1,4 +1,4 @@
-tool
+@tool
 class_name OrgPrezOutline extends VBoxContainer
 
 signal node_selected(org_node)

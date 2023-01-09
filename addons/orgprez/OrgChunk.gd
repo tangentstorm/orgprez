@@ -1,14 +1,15 @@
-tool class_name OrgChunk extends Resource
+@tool
+class_name OrgChunk extends Resource
 # this represensts one "chunk" (step/line) within an orgprez slide
 
-export var index = 0
-export var track : int = 0 # Org.Track.TEXT
-export(Vector2) var jpxy = Vector2.ZERO # x=slide number, y=line on slide
-export(String) var file_path = ''
-export(Array, String) var lines
+@export var index = 0
+@export var track : int = 0 # Org.Track.TEXT
+@export var jpxy: Vector2 = Vector2.ZERO # x=slide number, y=line checked slide
+@export var file_path: String = ''
+@export var lines : Array[String]
 
-export(Resource) var time_start
-export(Resource) var time_end
+@export var time_start: Resource
+@export var time_end: Resource
 
 func lines_to_string():
 	var res = ''
@@ -35,4 +36,4 @@ func suggest_path()->String:
 	return res + '.wav'
 
 func file_exists(dir_path)->bool:
-	return File.new().file_exists(dir_path + suggest_path())
+	return FileAccess.file_exists(dir_path + suggest_path())

@@ -1,5 +1,5 @@
 # presentation tool for emacs org files
-tool
+@tool
 extends EditorPlugin
 
 const audioTabScene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
@@ -7,11 +7,13 @@ var audioTabNode # member variable holding instance of audioTabScene
 
 var org_import
 func _enter_tree():
-	audioTabNode = audioTabScene.instance()
-	get_editor_interface().get_editor_viewport().add_child(audioTabNode)
-	audioTabNode.connect("audio_path_selected", self, "_on_audioTab_audio_path_selected")
-
-	make_visible(false) # otherwise it shows up on-screen no matter what tab is active
+	print("GOT HERE")
+	audioTabNode = audioTabScene.instantiate()
+	print("GOT HERE2")
+	get_editor_interface().get_editor_main_screen().add_child(audioTabNode)
+	print("GOT HERE3")
+	audioTabNode.connect("audio_path_selected",Callable(self,"_on_audioTab_audio_path_selected"))
+	_make_visible(false) # otherwise it shows up checked-screen no matter what tab is active
 	org_import = preload("res://addons/orgprez/org_import.gd").new()
 	add_import_plugin(org_import)
 
@@ -21,16 +23,16 @@ func _enter_tree():
 		if org:
 			edit(org)
 
-func has_main_screen():
+func _has_main_screen():
 	return true
 
-func get_plugin_name():
+func _get_plugin_name():
 	return "OrgPrez" # used in top-level tab name
 
-func get_plugin_icon():
-	return get_editor_interface().get_base_control().get_icon("AutoKey", "EditorIcons")
+func _get_plugin_icon():
+	return get_editor_interface().get_base_control().get_theme_icon("AutoKey", "EditorIcons")
 
-func make_visible(x): # called at startup and when the tab is changed
+func _make_visible(x): # called at startup and when the tab is changed
 	if audioTabNode: audioTabNode.visible = x
 
 func handles(object):
@@ -58,9 +60,9 @@ func _exit_tree():
 	remove_import_plugin(org_import); org_import = null
 
 func _on_audioTab_audio_path_selected(path):
-	var clip : AudioStreamSample
+	var clip : AudioStreamWAV
 	if ResourceLoader.exists(path): clip = load(path)
 	else:
-		clip = AudioStreamSample.new()
+		clip = AudioStreamWAV.new()
 		clip.resource_path = path
 	get_editor_interface().edit_resource(clip)

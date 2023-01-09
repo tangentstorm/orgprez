@@ -1,6 +1,6 @@
 class_name OrgPrezScriptEngine extends Node
 # simple interpreter for the '@event(x,y,z) lines in presentations.
-# these lines trigger the corresponding cmd_event(x,y,z) methods on this node.
+# these lines trigger the corresponding cmd_event(x,y,z) methods checked this node.
 # the methods return true if they trigger an animation,
 # or false if they finish immediately
 # ether way, they trigger the script_finished signal when done.
@@ -10,7 +10,7 @@ var script_id:int
 var script_result
 var tween:Tween
 var timer:Timer
-var user_scene:Node setget set_user_scene
+var user_scene:Node : set = set_user_scene
 var scene_title:Node
 var commander:Node
 
@@ -18,20 +18,20 @@ func set_user_scene(node):
 	user_scene = node
 	if node:
 		commander = user_scene.get_node_or_null('OrgCommands')
-		scene_title = user_scene.find_node("OrgSceneTitle")
+		scene_title = user_scene.find_child("OrgSceneTitle")
 		if scene_title:
-			scene_title.connect("animation_finished", self, "_on_animation_finished")
+			scene_title.connect("animation_finished",Callable(self,"_on_animation_finished"))
 	else:
 		commander = null
 		scene_title = null
 
 func _ready():
 	timer = Timer.new(); add_child(timer)
-	timer.connect("timeout", self, "_on_timer_timeout")
-	tween = Tween.new(); add_child(tween)
-	tween.connect("tween_started", self, "_on_tween_started")
-	tween.connect("tween_step", self, "_on_tween_step")
-	tween.connect("tween_completed", self, "_on_tween_finished")
+	timer.connect("timeout",Callable(self,"_on_timer_timeout"))
+	tween = get_tree().create_tween()
+	tween.connect("tween_started",Callable(self,"_on_tween_started"))
+	tween.connect("step_finished",Callable(self,"_on_tween_step"))
+	tween.connect("finished",Callable(self,"_on_tween_finished"))
 
 func _on_animation_finished():
 	emit_signal("script_finished", script_id, script_result)
@@ -47,13 +47,13 @@ func _on_tween_started(obj, path):
 	pass # print("tween finished", [obj, path])
 
 func _on_tween_step(obj, key, elapsed:float, value):
-	pass #print("tween_step", [obj, key, elapsed, value])
+	pass #print("step_finished", [obj, key, elapsed, value])
 
 func execute(id:int, script:String):
 	script_id = id
 	script_result = null
 	var e = Expression.new()
-	assert(script.begins_with('@'), 'event lines must start with "@"')
+	assert(script.begins_with('@')) #,'event lines must start with "@"')
 	script = 'cmd_' + script.right(1)
 	# TODO: check that there's actually a '('
 	var meth = script.split('(')[0]
@@ -86,12 +86,12 @@ func _find(node_path, cmd):
 const ANIMATED = true
 const IMMEDIATE = false
 const SHOW = Color(1,1,1,1)
-const HIDE = Color.transparent
+const HIDE = Color.TRANSPARENT
 
 func cmd_move(node_path:String, x, y, ms=0)->bool:
 	var node = _find(node_path, 'move')
 	if node == null: return IMMEDIATE
-	var prop = 'rect_position' if node is Control else 'position'
+	var prop = 'position' if node is Control else 'position'
 	var xy0 = node.get(prop)
 	var xy1 = Vector2(x, y)
 	return _tween(node, prop, xy0, xy1, ms)

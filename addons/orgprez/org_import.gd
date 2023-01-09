@@ -1,40 +1,41 @@
 # importer for orgprez-flavored .org files
 # https://docs.godotengine.org/en/stable/tutorials/plugins/editor/import_plugins.html
-tool extends EditorImportPlugin
+@tool
+extends EditorImportPlugin
 
-func get_importer_name():
+func _get_importer_name():
 	return "org.prez"
 
-func get_visible_name():
+func _get_visible_name():
 	return "orgprez screenplay (*.org)"
 
-func get_recognized_extensions():
+func _get_recognized_extensions():
 	return ["org"]
 
-func get_save_extension():
+func _get_save_extension():
 	return "res"
 
-func get_resource_type():
+func _get_resource_type():
 	return "Resource"
 
 enum Presets { DEFAULT }
 
-func get_preset_count():
+func _get_preset_count():
 	return Presets.size()
 
-func get_preset_name(preset):
+func _get_preset_name(preset):
 	match preset:
 		Presets.DEFAULT: return "Default"
 		_: return "Unknown"
 
-func get_import_options(preset):
+func _get_import_options(preset:String, index:int)->Array[Dictionary]:
 	return []
 
-func get_option_visibility(opt, opts):
+func _get_option_visibility(path, opt, opts):
 	return true
 
 func import(source_file, save_path, options, r_platform_variants, r_gen_files):
 	# TODO: error trapping
 	var org:OrgNode = Org.from_path(source_file)
-	var res = ResourceSaver.save("%s.%s" % [save_path, get_save_extension()], org)
+	var res = ResourceSaver.save(org, "%s.%s" % [save_path, _get_save_extension()])
 	return res

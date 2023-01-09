@@ -1,8 +1,8 @@
-tool
+@tool
 class_name OrgDeck extends Node
 
-func add_child(node:Node, legible_unique_name:bool=false):
-	.add_child(node, legible_unique_name)
+func add_child(node:Node, force_readable_name:bool=false, internal=0):
+	super.add_child(node, force_readable_name, internal)
 	observe(node)
 	show_only(node)
 
@@ -11,13 +11,13 @@ func _ready():
 		observe(child)
 
 func observe(node):
-	node.connect("visibility_changed", self, "on_child_visibility_changed", [node])
+	node.connect("visibility_changed",Callable(self,"on_child_visibility_changed").bind(node))
 
 # TODO: if the visible slide is removed, 
 #       and there is another slide, show one.
 #func remove_child(node:Node):
 #	if node.visible
-#	.remove_child(node)
+#	super.remove_child(node)
 
 func on_child_visibility_changed(child):
 	if child.visible:

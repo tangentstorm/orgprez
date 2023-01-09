@@ -1,15 +1,16 @@
-tool class_name OrgNode extends Resource
+@tool
+class_name OrgNode extends Resource
 # This is a recursive structure that represents
 # the content of an orgprez-flavored *.org file.
 
-export var depth : int
-export var head : String
-export(Array,String) var slide
-export var scene : String
-export var chunks : Array
-export var children : Array
+@export var depth : int
+@export var head : String
+@export var slide : Array[String] # (Array,String)
+@export var scene : String
+@export var chunks : Array
+@export var children : Array
 
-func _init(depth=0, head='', slide=[], chunks=[], children=[]):
+func _init(depth=0,head='',slide=[],chunks=[],children=[]):
 	self.depth = depth
 	self.head = head
 	self.slide = slide
@@ -63,7 +64,6 @@ func to_string():
 
 func save():
 	print("saving org to: ", resource_path)
-	var f = File.new()
-	f.open(resource_path, File.WRITE)
+	var f = FileAccess.open(resource_path, FileAccess.WRITE)
 	f.store_string(to_string())
 	f.close()

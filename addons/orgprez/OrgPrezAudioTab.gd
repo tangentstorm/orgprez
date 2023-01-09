@@ -1,18 +1,18 @@
-tool
+@tool
 class_name OrgPrezAudioTab extends VBoxContainer
 
 signal audio_path_selected(path)
 
-onready var chunklist = find_node("ChunkList")
-onready var outline = find_node("Outline")
-onready var editor = find_node("CodeEditor")
-onready var prompter:LineEdit = find_node("Prompter")
-onready var update_button = find_node("UpdateButton")
-onready var repl = find_node("REPL")
+@onready var chunklist = find_child("ChunkList")
+@onready var outline = find_child("Outline")
+@onready var editor = find_child("CodeEditor")
+@onready var prompter:LineEdit = find_child("Prompter")
+@onready var update_button = find_child("UpdateButton")
+@onready var repl = find_child("REPL")
 
-var org:OrgNode setget set_org
+var org:OrgNode : set = set_org
 var current_chunk: OrgChunk
-onready var current_track = Org.Track.AUDIO setget set_current_track
+@onready var current_track = Org.Track.AUDIO : set = set_current_track
 var last_caret_position = INF
 
 func set_current_track(t):
@@ -25,10 +25,10 @@ func set_current_track(t):
 func set_org(o:OrgNode):
 	org = o
 	chunklist.org_dir = org.get_dir()
-	chunklist.connect("audio_chunk_selected", self, "_on_audio_chunk_selected")
-	chunklist.connect("macro_chunk_selected", self, "_on_macro_chunk_selected")
-	chunklist.connect("chunk_selected", self, "_on_chunk_selected")
-	outline.connect("node_selected", self, "_on_headline_selected")
+	chunklist.connect("audio_chunk_selected",Callable(self,"_on_audio_chunk_selected"))
+	chunklist.connect("macro_chunk_selected",Callable(self,"_on_macro_chunk_selected"))
+	chunklist.connect("chunk_selected",Callable(self,"_on_chunk_selected"))
+	outline.connect("node_selected",Callable(self,"_on_headline_selected"))
 	outline.set_org(org)
 
 func _on_headline_selected(org):
@@ -61,13 +61,13 @@ func _on_Prompter_text_changed(new_text):
 
 func _process(_dt):
 	if current_track == Org.Track.MACRO:
-		if prompter.caret_position != last_caret_position:
+		if prompter.caret_column != last_caret_position:
 			# !! in jprez, modifying led notifies red to play the macro.
 			if prompter.text.begins_with(": . "):
-				var j = "notify__red '%s'" % prompter.text.left(prompter.caret_position).replace("'", "''")
+				var j = "notify__red '%s'" % prompter.text.left(prompter.caret_column).replace("'", "''")
 				repl.JI.cmd(j)
 				repl.refresh()
-		last_caret_position = prompter.caret_position
+		last_caret_position = prompter.caret_column
 
 func _on_UpdateButton_pressed():
 	var chunk = current_chunk
@@ -77,14 +77,14 @@ func _on_UpdateButton_pressed():
 		chunk.lines.push_back(line)
 	if current_track == Org.Track.AUDIO:
 		var new_path = chunk.suggest_path()
-		var d = Directory.new()
-		assert(d.open(org.get_dir()) == OK, "couldn't open org directory %s ?!" % org.get_dir())
+		var d = DirAccess.open(org.get_dir())
+		assert(d, "couldn't open org directory %s ?!" % org.get_dir())
 		if d.file_exists(old_path):
 			if d.file_exists(new_path):
 				print("old_path:", old_path)
 				print("new_path:", new_path)
 				printerr('both old and new paths already exist!')
-			else: assert(d.rename(old_path, new_path) == OK, "couldn't rename %s to %s" % [old_path, new_path])
+			else: assert(d.rename(old_path, new_path) == OK) #,"couldn't rename %s to %s" % [old_path, new_path])
 	else: pass
 	org.save()
 
