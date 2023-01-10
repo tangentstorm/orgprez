@@ -34,8 +34,7 @@ func _get_import_options(preset:String, index:int)->Array[Dictionary]:
 func _get_option_visibility(path, opt, opts):
 	return true
 
-func import(source_file, save_path, options, r_platform_variants, r_gen_files):
+func _import(source_file, save_path, options, r_platform_variants, r_gen_files):
 	# TODO: error trapping
 	var org:OrgNode = Org.from_path(source_file)
-	var res = ResourceSaver.save(org, "%s.%s" % [save_path, _get_save_extension()])
-	return res
+	return ResourceSaver.save(org, "%s.%s" % [save_path, _get_save_extension()])
