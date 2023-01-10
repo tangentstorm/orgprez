@@ -7,11 +7,8 @@ var audioTabNode # member variable holding instance of audioTabScene
 
 var org_import
 func _enter_tree():
-	print("GOT HERE")
 	audioTabNode = audioTabScene.instantiate()
-	print("GOT HERE2")
 	get_editor_interface().get_editor_main_screen().add_child(audioTabNode)
-	print("GOT HERE3")
 	audioTabNode.connect("audio_path_selected",Callable(self,"_on_audioTab_audio_path_selected"))
 	_make_visible(false) # otherwise it shows up checked-screen no matter what tab is active
 	org_import = preload("res://addons/orgprez/org_import.gd").new()
