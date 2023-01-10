@@ -43,7 +43,7 @@ func _on_chunk_selected(chunk:OrgChunk):
 	update_button.disabled = true
 
 func _on_audio_chunk_selected(chunk:OrgChunk):
-	var wavepath = org.get_dir() + "wav/" + chunk.suggest_path()
+	var wavepath = org.get_dir() + chunk.suggest_path()
 	emit_signal("audio_path_selected", wavepath)
 
 func _on_macro_chunk_selected(chunk:OrgChunk):

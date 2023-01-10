@@ -33,7 +33,7 @@ func suggest_path()->String:
 		if ch in 'abcdefghijklmnopqrstuvwxyz0123456789': res += ch
 		if len(res) == 32: break
 	if len(res) < 32: res += md5.right(4).left(32-len(res))
-	return res + '.wav'
+	return 'wav/' + res + '.wav'
 
 func file_exists(dir_path)->bool:
 	return FileAccess.file_exists(dir_path + suggest_path())
