@@ -1,17 +1,18 @@
 @tool
 class_name OrgPrezOutline extends VBoxContainer
 
+@onready var tree : Tree = $Tree
+
 signal node_selected(org_node)
 
 func set_org(org:OrgNode):
-	$Tree.clear()
-	org.add_to_tree($Tree, null)
+	tree.clear()
+	org.add_to_tree(tree, null)
 	# extra line at the end so we can 'insert' before end
-	var blank = $Tree.create_item(); blank.set_text(0, '')
-	$Tree.get_root().get_children().select(0)
+	var blank = tree.create_item(); blank.set_text(0, '')
+	tree.set_selected(blank, true)
 
 func get_org_tree()->Tree:
-	var tree : Tree = $Tree
 	return tree
 
 func _on_Tree_item_selected():

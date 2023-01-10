@@ -78,7 +78,7 @@ func _on_UpdateButton_pressed():
 	if current_track == Org.Track.AUDIO:
 		var new_path = chunk.suggest_path()
 		var d = DirAccess.open(org.get_dir())
-		assert(d, "couldn't open org directory %s ?!" % org.get_dir())
+		assert(d) #,"couldn't open org directory %s ?!" % org.get_dir())
 		if d.file_exists(old_path):
 			if d.file_exists(new_path):
 				print("old_path:", old_path)

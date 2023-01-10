@@ -51,13 +51,12 @@ func _on_Tree_item_selected():
 	emit_signal("chunk_selected", chunk)
 
 func clear_highlights():
-	var item = tree.get_root().get_children()
-	while item != null:
+	if not tree or not tree.get_root(): return
+	for item in tree.get_root().get_children():
 		item.clear_custom_bg_color(0)
-		item = item.get_next()
 
 func highlight_chunk(chunk, color):
-	if not chunk: return
+	if not chunk or not tree.get_root(): return
 	var items = tree.get_root().get_children()
 	for item in items:
 		var item_chunk = item.get_meta('chunk')
