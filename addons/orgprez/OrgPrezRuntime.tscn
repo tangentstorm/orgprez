@@ -1,18 +1,22 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://c6rhpchogqmig"]
 
-[ext_resource path="res://addons/orgprez/OrgPrezRuntime.gd" type="Script" id=1]
-[ext_resource path="res://addons/orgprez/OrgPrezScriptEngine.gd" type="Script" id=2]
-[ext_resource path="res://addons/orgprez/OrgPrezStepper.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://addons/orgprez/OrgPrezRuntime.gd" id="1"]
+[ext_resource type="Script" path="res://addons/orgprez/OrgPrezScriptEngine.gd" id="2"]
+[ext_resource type="PackedScene" path="res://addons/orgprez/OrgPrezStepper.tscn" id="4"]
 
 [node name="OrgPrezRuntime" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
 
 [node name="OrgPrezScriptEngine" type="Node" parent="."]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="OrgPrezStepper" parent="." instance=ExtResource( 4 )]
+[node name="OrgPrezStepper" parent="." instance=ExtResource("4")]
 
 [connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_OrgPrezScriptEngine_script_finished"]
 [connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]
