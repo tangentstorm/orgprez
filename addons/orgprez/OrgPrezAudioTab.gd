@@ -17,7 +17,7 @@ var last_caret_position = INF
 
 func set_current_track(t):
 	current_track = t
-	#repl.visible = false; 
+	#repl.visible = false;
 	#match t:
 		#Org.Track.AUDIO: wavepanel.visible = true
 		#Org.Track.MACRO: repl.visible = true
@@ -43,12 +43,11 @@ func _on_chunk_selected(chunk:OrgChunk):
 	update_button.disabled = true
 
 func _on_audio_chunk_selected(chunk:OrgChunk):
-	var wavepath = org.get_dir() + chunk.suggest_path()
+	var wavepath = org.get_dir() + "wav/" + chunk.suggest_path()
 	emit_signal("audio_path_selected", wavepath)
 
 func _on_macro_chunk_selected(chunk:OrgChunk):
 	return
-	
 	# !! almost jprezstepper.goix(), but don't advance. (TODO: merge the stepper with this view?)
 	#repl.JI.cmd("goix %d %d" % [chunk.jpxy.x, chunk.jpxy.y])
 	# except this version also triggers the macro debugger.
