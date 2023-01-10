@@ -70,7 +70,7 @@ class OrgParser:
 		for line in f.get_as_text().split("\n"):
 			lno += 1
 			var cut = line.find(" ")
-			var rest = line.right(cut).strip_edges()
+			var rest = line.substr(cut).strip_edges()
 			if in_src:
 				if line == '#+end_src': in_src = false
 				else: node.slide.append(line)
