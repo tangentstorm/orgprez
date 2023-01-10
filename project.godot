@@ -108,7 +108,7 @@ enable_audio_input=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/waveform/plugin.cfg")
+enabled=PackedStringArray("res://addons/waveform/plugin.cfg", "res://addons/orgprez/plugin.cfg")
 
 [gui]
 
