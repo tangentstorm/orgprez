@@ -31,10 +31,14 @@ func _get_preset_name(preset):
 func _get_import_options(preset:String, index:int)->Array[Dictionary]:
 	return []
 
+func _get_import_order()->int:
+	return 0
+
 func _get_option_visibility(path, opt, opts):
 	return true
 
 func _import(source_file, save_path, options, r_platform_variants, r_gen_files):
 	# TODO: error trapping
 	var org:OrgNode = Org.from_path(source_file)
-	return ResourceSaver.save(org, "%s.%s" % [save_path, _get_save_extension()])
+	ResourceSaver.save(org, "%s.%s" % [save_path, _get_save_extension()])
+	return org
