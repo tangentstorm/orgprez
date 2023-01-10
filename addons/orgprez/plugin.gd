@@ -2,6 +2,7 @@
 @tool
 extends EditorPlugin
 
+const LATEST_ORG_FILE = "global/latest_org_file"
 const audioTabScene = preload('res://addons/orgprez/OrgPrezAudioTab.tscn')
 var audioTabNode # member variable holding instance of audioTabScene
 
@@ -13,12 +14,11 @@ func _enter_tree():
 	_make_visible(false) # otherwise it shows up checked-screen no matter what tab is active
 	org_import = preload("res://addons/orgprez/org_import.gd").new()
 	add_import_plugin(org_import)
-
-	var org_path = ProjectSettings.get("global/default_org_file")
+	var org_path = ProjectSettings.get(LATEST_ORG_FILE)
 	if org_path:
 		var org = load(org_path)
 		if org:
-			edit(org)
+			_edit(org)
 
 func _has_main_screen():
 	return true
@@ -32,10 +32,10 @@ func _get_plugin_icon():
 func _make_visible(x): # called at startup and when the tab is changed
 	if audioTabNode: audioTabNode.visible = x
 
-func handles(object):
+func _handles(object):
 	return object is OrgNode
 
-func edit(org):
+func _edit(org):
 	# remember directory for saving wave files
 	# TODO: make this wav_dir
 	# wav_dir = org.resource_path.get_base_dir()
@@ -49,7 +49,7 @@ func edit(org):
 	# jprez.set_org(org)
 
 	audioTabNode.set_org(org)
-	ProjectSettings.set_setting("global/default_org_file", org.resource_path)
+	ProjectSettings.set_setting(LATEST_ORG_FILE, org.resource_path)
 	ProjectSettings.save()
 
 func _exit_tree():
