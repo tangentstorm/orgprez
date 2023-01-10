@@ -20,4 +20,6 @@ func _on_Tree_item_selected():
 	emit_signal("node_selected", org)
 
 func get_current_org_node() -> OrgNode:
+	if not get_org_tree(): return null
+	if not get_org_tree().get_selected(): return null
 	return get_org_tree().get_selected().get_metadata(0)
