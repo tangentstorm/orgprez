@@ -38,8 +38,8 @@ func set_org(org:OrgNode):
 			Org.Track.EVENT: color = Color.CORNFLOWER_BLUE
 		item.set_custom_color(Col.TEXT, color)
 
-	var first = tree.get_root().get_children()
-	if first: first.select(Col.TEXT)
+	var items = tree.get_root().get_children()
+	if len(items): tree.set_selected(items[0], Col.TEXT)
 
 func _on_Tree_item_selected():
 	var chunk = tree.get_selected().get_meta('chunk')
