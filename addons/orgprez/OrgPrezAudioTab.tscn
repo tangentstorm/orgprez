@@ -1,13 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://dea7e6n46vei"]
 
 [ext_resource type="PackedScene" uid="uid://cxxkv4w4el1ed" path="res://addons/orgprez/OrgPrezChunkList.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://addons/orgprez/OrgPrezOutline.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cypqlui1uoofd" path="res://addons/orgprez/OrgPrezOutline.tscn" id="3"]
 [ext_resource type="Script" path="res://addons/orgprez/OrgPrezAudioTab.gd" id="6"]
 
 [node name="OrgPrezAudioTab" type="VBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 script = ExtResource("6")
 
@@ -17,13 +19,18 @@ offset_bottom = 613.0
 size_flags_vertical = 3
 
 [node name="Outline" parent="HBoxContainer" instance=ExtResource("3")]
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
+offset_right = 256.0
 offset_bottom = 613.0
+grow_horizontal = 1
+grow_vertical = 1
 size_flags_vertical = 3
 
 [node name="HSplit" type="HSplitContainer" parent="HBoxContainer"]
-offset_left = 4.0
+offset_left = 260.0
 offset_right = 1152.0
 offset_bottom = 613.0
 size_flags_horizontal = 3
@@ -31,15 +38,19 @@ size_flags_vertical = 3
 split_offset = 320
 
 [node name="ChunkList" parent="HBoxContainer/HSplit" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_right = 888.0
+offset_right = 760.0
 offset_bottom = 613.0
+grow_horizontal = 1
+grow_vertical = 1
 size_flags_horizontal = 3
 
 [node name="CodeEditor" type="TextEdit" parent="HBoxContainer/HSplit"]
-offset_left = 900.0
-offset_right = 1148.0
+offset_left = 772.0
+offset_right = 892.0
 offset_bottom = 613.0
 size_flags_horizontal = 3
 

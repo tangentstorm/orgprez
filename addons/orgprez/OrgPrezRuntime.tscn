@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/orgprez/OrgPrezRuntime.gd" id="1"]
 [ext_resource type="Script" path="res://addons/orgprez/OrgPrezScriptEngine.gd" id="2"]
-[ext_resource type="PackedScene" path="res://addons/orgprez/OrgPrezStepper.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://dowvk42pqj4u4" path="res://addons/orgprez/OrgPrezStepper.tscn" id="4"]
 
 [node name="OrgPrezRuntime" type="Control"]
 layout_mode = 3
@@ -17,6 +17,8 @@ script = ExtResource("1")
 script = ExtResource("2")
 
 [node name="OrgPrezStepper" parent="." instance=ExtResource("4")]
+position = Vector2i(500, 50)
+transient = true
 
 [connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_OrgPrezScriptEngine_script_finished"]
 [connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]
