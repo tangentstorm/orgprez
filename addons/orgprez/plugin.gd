@@ -43,14 +43,14 @@ func _edit(org):
 	# chunks.org_dir = wav_dir  # !! only need for waves, so update chunks code
 	# wav_dir += '.wav'
 
-	# tell the audioTabNode to load that org-file
-	# chunks.set_org(org) # outln will override this with first node (if one exists)
-	# outln.set_org(org)
-	# jprez.set_org(org)
-
-	audioTabNode.set_org(org)
-	ProjectSettings.set_setting(LATEST_ORG_FILE, org.resource_path)
-	ProjectSettings.save()
+	# !! org will be null when a different object is selected for editing.
+	# this is intended to let you clear out the panel, but we want the
+	# editor to keep its data regardless of the selected object until we
+	# double-click another org file. (new behavior in godot 4?)
+	if org != null:
+		audioTabNode.set_org(org)
+		ProjectSettings.set_setting(LATEST_ORG_FILE, org.resource_path)
+		ProjectSettings.save()
 
 func _exit_tree():
 	if audioTabNode: audioTabNode.queue_free()

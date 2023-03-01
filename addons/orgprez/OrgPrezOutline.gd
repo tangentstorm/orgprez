@@ -10,7 +10,7 @@ func set_org(org:OrgNode):
 	org.add_to_tree(tree, null)
 	# extra line at the end so we can 'insert' before end
 	var blank = tree.create_item(); blank.set_text(0, '')
-	tree.set_selected(blank, true)
+	tree.set_selected(blank, 0)
 
 func get_org_tree()->Tree:
 	return tree

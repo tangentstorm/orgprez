@@ -10,7 +10,7 @@ class_name OrgNode extends Resource
 @export var chunks : Array
 @export var children : Array
 
-func _init(depth=0,head='',slide=[],chunks=[],children=[]):
+func _init(depth=0,head='',slide:Array[String]=[],chunks=[],children=[]):
 	self.depth = depth
 	self.head = head
 	self.slide = slide
