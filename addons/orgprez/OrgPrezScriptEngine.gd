@@ -51,7 +51,7 @@ func execute(id:int, script:String):
 	script_result = null
 	var e = Expression.new()
 	assert(script.begins_with('@')) #,'event lines must start with "@"')
-	script = 'cmd_' + script.right(1)
+	script = 'cmd_' + script.right(-1)
 	# TODO: check that there's actually a '('
 	var meth = script.split('(')[0]
 	if OK == e.parse(script):
