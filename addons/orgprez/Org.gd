@@ -67,7 +67,7 @@ class OrgParser:
 		root.resource_path = path
 		var f = FileAccess.open(path, FileAccess.READ)
 		var lno = -1; var in_src = false
-		for line in f.get_as_text().split("\n"):
+		for line in f.get_as_text(true).split("\n"):
 			lno += 1
 			var cut = line.find(" ")
 			var rest = line.substr(cut).strip_edges()
