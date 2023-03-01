@@ -10,7 +10,7 @@ var sync_pending = false
 var playing = false
 var step_ready = false
 var old_slide = 0
-var tracks: Array
+var tracks: Array[OrgCursor]
 var track_ready: Array
 var this_audio_chunk
 var next_audio_chunk
@@ -46,7 +46,7 @@ func _on_script_finished(_id, _result):
 	track_ready[Org.Track.EVENT] = true
 	tracks[Org.Track.EVENT].find_next(Org.Track.EVENT)
 
-func _on_macro_finished():
+func _on_macro_finished(_id, _result):
 	track_ready[Org.Track.MACRO] = true
 
 func track_to_step():
@@ -125,6 +125,7 @@ func process_macro_track():
 		if next_audio_chunk == null or macro_chunk.index < next_audio_chunk.index:
 			track_ready[Org.Track.MACRO] = false
 			var ix = macro_chunk.jpxy
+			script_engine.run_macro(ix.y, macro_chunk.lines[0])
 			emit_signal('orgprez_line_changed', ix.x, ix.y)
 			var next_macro = tracks[Org.Track.MACRO].find_next(Org.Track.MACRO)
 			if not next_macro: track_ready[Org.Track.MACRO] = false

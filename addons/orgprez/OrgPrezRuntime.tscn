@@ -20,5 +20,7 @@ script = ExtResource("2")
 position = Vector2i(500, 50)
 transient = true
 
-[connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_OrgPrezScriptEngine_script_finished"]
+[connection signal="macro_finished" from="OrgPrezScriptEngine" to="." method="_on_macro_finished"]
+[connection signal="script_finished" from="OrgPrezScriptEngine" to="." method="_on_script_finished"]
 [connection signal="orgprez_line_changed" from="OrgPrezStepper" to="." method="_on_OrgPrezStepper_orgprez_line_changed"]
+[connection signal="orgprez_node_changed" from="OrgPrezStepper" to="." method="_on_orgnode_changed"]

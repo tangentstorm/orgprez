@@ -2,7 +2,7 @@ class_name OrgPrezRuntime extends Control
 
 var org: OrgNode
 var org_path = ProjectSettings.get("global/default_org_file")
-var user_scene
+var user_scene: Node
 var org_deck : OrgDeck
 
 @onready var stepper:OrgPrezStepper = $OrgPrezStepper
@@ -27,20 +27,24 @@ func _ready():
 
 	var tscn = org_path.replace('.org','.tscn')
 	if not ResourceLoader.exists(tscn):
+		print("no custom tscn file found (",tscn,")")
+		print("loading default scene (JPrezPlayer)")
 		tscn = 'res://addons/jprez/JPrezPlayer.tscn' # !! todo: new default scene
+
 	user_scene = load(tscn).instantiate()
 	add_child(user_scene)
 	if user_scene.has_method('set_org_path'):
 		user_scene.set_org_path(org.get_global_path())
+	if user_scene.has_signal('macro_finished'):
+		user_scene.connect('macro_finished', func(): self._on_macro_finished(0,null))
 	script_engine.user_scene = user_scene
 
 	var d = user_scene.get_node_or_null('OrgDeck')
 	if not d:
-		push_warning("couldn't find OrgDeck node")
+		print("Adding default OrgDeck node")
 		d = OrgDeck.new()
 		user_scene.add_child(d)
 	org_deck = d
-	stepper.connect('orgprez_node_changed',Callable(self,'_on_orgnode_changed'))
 	_on_orgnode_changed(stepper.get_current_org_node())
 
 func load_timeline():
@@ -88,13 +92,13 @@ func _on_OrgPrezStepper_orgprez_line_changed(scene, cmd):
 	if user_scene.has_method('goix'):
 		user_scene.goix(scene, cmd)
 
-func _on_OrgPrezScriptEngine_script_finished(id, result):
+func _on_script_finished(id, result):
 	stepper._on_script_finished(id, result)
 
-func _on_JPrezScene_macro_finished():
-	stepper._on_macro_finished()
+func _on_macro_finished(id, result):
+	stepper._on_macro_finished(id, result)
 
 func _on_orgnode_changed(orgNode):
-	if orgNode: org_deck.show_slide(orgNode.scene)
-	else: org_deck.hide_all()
-
+	if org_deck:
+		if orgNode: org_deck.show_slide(orgNode.scene)
+		else: org_deck.hide_all()

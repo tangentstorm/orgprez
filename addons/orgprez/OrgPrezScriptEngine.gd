@@ -6,9 +6,10 @@ class_name OrgPrezScriptEngine extends Node
 # ether way, they trigger the script_finished signal when done.
 
 signal script_finished(id, result)
+signal macro_finished(id, result)
+
 var script_id:int
 var script_result
-var tween:Tween
 var timer:Timer
 var user_scene:Node : set = set_user_scene
 var scene_title:Node
@@ -18,6 +19,7 @@ func set_user_scene(node):
 	user_scene = node
 	if node:
 		commander = user_scene.get_node_or_null('OrgCommands')
+		if not commander: commander = node
 		scene_title = user_scene.find_child("OrgSceneTitle")
 		if scene_title:
 			scene_title.connect("animation_finished",Callable(self,"_on_animation_finished"))
@@ -28,9 +30,12 @@ func set_user_scene(node):
 func _ready():
 	timer = Timer.new(); add_child(timer)
 	timer.connect("timeout",Callable(self,"_on_timer_timeout"))
-	tween = get_tree().create_tween()
+
+func make_tween()->Tween:
+	var tween = get_tree().get_root().create_tween()
 	tween.connect("step_finished",Callable(self,"_on_tween_step"))
 	tween.connect("finished",Callable(self,"_on_tween_finished"))
+	return tween
 
 func _on_animation_finished():
 	emit_signal("script_finished", script_id, script_result)
@@ -38,13 +43,11 @@ func _on_animation_finished():
 func _on_timer_timeout():
 	_on_animation_finished()
 
-func _on_tween_finished(obj, path):
-	# print("tween finished", [obj, path])
+func _on_tween_finished():
 	_on_animation_finished()
 
-
-func _on_tween_step(obj, key, elapsed:float, value):
-	pass #print("step_finished", [obj, key, elapsed, value])
+func _on_tween_step(ix:int):
+	pass #print("step_finished", ix)
 
 func execute(id:int, script:String):
 	script_id = id
@@ -61,6 +64,15 @@ func execute(id:int, script:String):
 		if not animated: call_deferred("_on_animation_finished")
 	else: printerr("OrgPrezScriptEngine parse error: ", script)
 
+func run_macro(id:int, macro:String):
+	var res = null
+	if commander and commander.has_method('run_macro'):
+		# !! make sure you also emit a "macro_finished" signal
+		res = commander.run_macro(macro)
+	else:
+		print("ignoring macro:", macro)
+		emit_signal("macro_finished", id, res)
+
 ### helper methods ###########################################
 
 
@@ -69,8 +81,10 @@ func _tween(node:Node, prop:String, a, z, ms)->bool:
 	if ms==0: node.set(prop, z)
 	else:
 		print("tweening ", prop, ' ms:', ms)
-		tween.interpolate_property(node, prop, a, z, ms*0.001, Tween.TRANS_LINEAR, Tween.EASE_IN)
-		tween.start()
+		node.set(prop, a)
+		make_tween().set_ease(Tween.EASE_IN)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.tween_property(node, prop, z, ms*0.001)
 	return ANIMATED if ms > 0 else IMMEDIATE
 
 func _find(node_path, cmd):

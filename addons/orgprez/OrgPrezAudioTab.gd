@@ -44,12 +44,6 @@ func _on_audio_chunk_selected(chunk:OrgChunk):
 
 func _on_macro_chunk_selected(chunk:OrgChunk):
 	return
-	# !! almost jprezstepper.goix(), but don't advance. (TODO: merge the stepper with this view?)
-	#repl.JI.cmd("goix %d %d" % [chunk.jpxy.x, chunk.jpxy.y])
-	# except this version also triggers the macro debugger.
-	# (code taken from edline'' in jprez)
-	#repl.JI.cmd("setval__red ''")
-	#repl.JI.cmd("notify__red =: instaplay @ (4&}. [ reset_rhist_base_@'')")
 
 func _on_Prompter_text_changed(new_text):
 	update_button.disabled = false
@@ -58,6 +52,7 @@ func _process(_dt):
 	if current_track == Org.Track.MACRO:
 		if prompter.caret_column != last_caret_position:
 			# !! in jprez, modifying led notifies red to play the macro.
+			# !! the following implements a jprez macro debugger.
 			if prompter.text.begins_with(": . "):
 				var j = "notify__red '%s'" % prompter.text.left(prompter.caret_column).replace("'", "''")
 				repl.JI.cmd(j)
