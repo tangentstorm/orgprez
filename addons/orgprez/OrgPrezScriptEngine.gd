@@ -29,7 +29,6 @@ func _ready():
 	timer = Timer.new(); add_child(timer)
 	timer.connect("timeout",Callable(self,"_on_timer_timeout"))
 	tween = get_tree().create_tween()
-	tween.connect("tween_started",Callable(self,"_on_tween_started"))
 	tween.connect("step_finished",Callable(self,"_on_tween_step"))
 	tween.connect("finished",Callable(self,"_on_tween_finished"))
 
@@ -43,8 +42,6 @@ func _on_tween_finished(obj, path):
 	# print("tween finished", [obj, path])
 	_on_animation_finished()
 
-func _on_tween_started(obj, path):
-	pass # print("tween finished", [obj, path])
 
 func _on_tween_step(obj, key, elapsed:float, value):
 	pass #print("step_finished", [obj, key, elapsed, value])
