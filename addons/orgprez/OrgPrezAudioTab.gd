@@ -54,9 +54,10 @@ func _process(_dt):
 			# !! in jprez, modifying led notifies red to play the macro.
 			# !! the following implements a jprez macro debugger.
 			if prompter.text.begins_with(": . "):
-				var j = "notify__red '%s'" % prompter.text.left(prompter.caret_column).replace("'", "''")
-				repl.JI.cmd(j)
-				repl.refresh()
+				pass
+				#var j = "notify__red '%s'" % prompter.text.left(prompter.caret_column).replace("'", "''")
+				#repl.JI.cmd(j)
+				#repl.refresh()
 		last_caret_position = prompter.caret_column
 
 func _on_UpdateButton_pressed():
