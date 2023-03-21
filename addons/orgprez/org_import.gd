@@ -28,6 +28,9 @@ func _get_preset_name(preset):
 		Presets.DEFAULT: return "Default"
 		_: return "Unknown"
 
+func _get_priority():
+	return 1.0
+
 func _get_import_options(preset:String, index:int)->Array[Dictionary]:
 	return []
 
