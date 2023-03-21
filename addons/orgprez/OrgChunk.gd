@@ -18,6 +18,9 @@ func lines_to_string():
 	return res
 
 func to_string():
+	return to_org_string()
+
+func to_org_string():
 	# TODO: include the path and timing
 	return lines_to_string()
 

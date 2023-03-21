@@ -29,12 +29,13 @@ func get_global_path():
 func add_child(node:OrgNode):
 	self.children.append(node)
 
-func add_to_tree(tree:Tree, parent:TreeItem):
+func add_to_tree(tree:Tree, parent:TreeItem, editable:bool=true):
 	var item = tree.create_item(parent)
 	item.set_text(0, self.head)
 	item.set_metadata(0, self)
+	item.set_editable(0, editable)
 	for child in self.children:
-		child.add_to_tree(tree, item)
+		child.add_to_tree(tree, item, editable)
 
 func slide_text()->String:
 	var res = ''
@@ -43,12 +44,13 @@ func slide_text()->String:
 	return res
 
 func dump():
-	print(to_string())
+	print(to_org_string())
 
-func to_string():
+# to_string() seems to return Resource<#> if it's not downcast properly, so this instead.
+func to_org_string():
 	var res = ''
-	if depth == 0: res += "#+title:%s\n\n" % head
-	else: res += "*".repeat(depth) + head + '\n'
+	if depth == 0: res += "#+title: %s\n\n" % head
+	else: res += "*".repeat(depth) + ' ' + head + '\n'
 	if slide:
 		res += "#+begin_src j\n"
 		res += slide_text()
@@ -56,14 +58,14 @@ func to_string():
 		res += "\n"
 	if self.children:
 		for child in self.children:
-			res += child.to_string()
+			res += child.to_org_string()
 	else:
 		for chunk in self.chunks:
-			res += chunk.to_string() + '\n\n'
+			res += chunk.to_org_string() + '\n\n'
 	return res
 
 func save():
 	print("saving org to: ", resource_path)
 	var f = FileAccess.open(resource_path, FileAccess.WRITE)
-	f.store_string(to_string())
+	f.store_string(to_org_string())
 	f.close()

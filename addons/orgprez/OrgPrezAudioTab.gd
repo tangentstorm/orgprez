@@ -81,3 +81,7 @@ func _on_UpdateButton_pressed():
 
 func _on_macro_track_selected(chunk:OrgChunk):
 	self.current_track = Org.Track.MACRO
+
+func _on_outline_headline_changed():
+	print("saving!")
+	org.save()

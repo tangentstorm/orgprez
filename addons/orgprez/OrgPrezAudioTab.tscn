@@ -13,27 +13,28 @@ grow_vertical = 2
 size_flags_vertical = 3
 script = ExtResource("6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HSplit" type="HSplitContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
+split_offset = 300
 
-[node name="Outline" parent="HBoxContainer" instance=ExtResource("3")]
+[node name="Outline" parent="HSplit" instance=ExtResource("3")]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HSplit" type="HSplitContainer" parent="HBoxContainer"]
+[node name="VSplit" type="VSplitContainer" parent="HSplit"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = 320
+split_offset = 60
 
-[node name="ChunkList" parent="HBoxContainer/HSplit" instance=ExtResource("1")]
-custom_minimum_size = Vector2(200, 0)
+[node name="CodeEditor" type="TextEdit" parent="HSplit/VSplit"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CodeEditor" type="TextEdit" parent="HBoxContainer/HSplit"]
+[node name="ChunkList" parent="HSplit/VSplit" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -56,9 +57,10 @@ layout_mode = 2
 disabled = true
 text = "update"
 
-[connection signal="node_selected" from="HBoxContainer/Outline" to="." method="_on_headline_selected"]
-[connection signal="audio_chunk_selected" from="HBoxContainer/HSplit/ChunkList" to="." method="_on_audio_chunk_selected"]
-[connection signal="chunk_selected" from="HBoxContainer/HSplit/ChunkList" to="." method="_on_chunk_selected"]
-[connection signal="macro_chunk_selected" from="HBoxContainer/HSplit/ChunkList" to="." method="_on_macro_chunk_selected"]
+[connection signal="headline_changed" from="HSplit/Outline" to="." method="_on_outline_headline_changed"]
+[connection signal="node_selected" from="HSplit/Outline" to="." method="_on_headline_selected"]
+[connection signal="audio_chunk_selected" from="HSplit/VSplit/ChunkList" to="." method="_on_audio_chunk_selected"]
+[connection signal="chunk_selected" from="HSplit/VSplit/ChunkList" to="." method="_on_chunk_selected"]
+[connection signal="macro_chunk_selected" from="HSplit/VSplit/ChunkList" to="." method="_on_macro_chunk_selected"]
 [connection signal="text_changed" from="EditPanel/Panel/Prompter" to="." method="_on_Prompter_text_changed"]
 [connection signal="pressed" from="EditPanel/Panel/VBoxContainer/UpdateButton" to="." method="_on_UpdateButton_pressed"]
